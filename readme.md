@@ -10,7 +10,7 @@ $ npm install --save imh
 
 ## Benchmarks
 
-### Single mutation
+**Single mutation**
 
 | Library                         | Read |  Write |  Total |
 | ------------------------------- | ---: | -----: | -----: |
@@ -24,7 +24,7 @@ $ npm install --save imh
 | update-immutable                |   44 | 38,532 | 38,576 |
 | immutability-helper             |   50 | 38,666 | 38,716 |
 
-### Multiple mutations
+**Multiple mutations**
 
 | Library                    | Read | Write | Total |
 | -------------------------- | ---: | ----: | ----: |
