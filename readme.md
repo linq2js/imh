@@ -25,13 +25,9 @@ $ npm install --save imh
 **Hence, what I recommend (from top to bottom):**
 
 1. If you don't need immutability, well... just mutate in peace! I mean, in place
-
 1. If you need a complete, well-tested, rock-solid library and don't mind using a non-native API for reads: use ImmutableJS
-
 1. If you value using plain arrays/objects above other considerations, use **imh**
-
 1. If your typical use cases involve much more reading than writing, use **imh** as well
-
 1. If you do a lot of writes, updating items in long arrays or attributes in fat objects, use ImmutableJS
 
 ## Usage
