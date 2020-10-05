@@ -139,7 +139,7 @@ console.log(state);
 */
 ```
 
-## Imh
+## API References
 
 ### imh(obj, mutation | mutations)
 
@@ -283,19 +283,96 @@ imh([1, 2, 3], imh.pop());
 
 ### shift()
 
+```jsx
+imh([1, 2, 3], imh.shift());
+// => [2, 3]
+```
+
 ### unshift(...items)
 
+```jsx
+imh([1, 2, 3], imh.unshift(-1, 0));
+// => [-1, 0, 1, 2, 3]
+```
+
 ### reverse()
+
+```jsx
+imh([1, 2, 3], imh.reverse());
+// => [3, 2, 1]
+```
 
 ## Object
 
 ### prop()
 
+Update current / nested object property
+
+```jsx
+const model = { l1: { l2: { l3: { l4: 1 } } } };
+imh(
+  model,
+  imh.prop("l1", imh.prop("l2", imh.prop("l3", imh.prop("l4", imh.val(2)))))
+);
+
+imh(
+  model,
+  imh.prop(
+    "l1",
+    imh.prop(
+      "l2",
+      imh.prop(
+        "l3",
+        imh.prop("l4", () => 2)
+      )
+    )
+  )
+);
+
+imh(model, imh.prop("l1", imh.prop("l2", imh.prop("l3", imh.set("l4", 2)))));
+
+imh(model, imh.prop(["l1", "l2", "l3", "l4"], imh.val(2)));
+
+imh(
+  model,
+  imh.prop(["l1", "l2", "l3", "l4"], () => 2)
+);
+
+imh(model, imh.prop(["l1", "l2", "l3"], imh.set("l4", 2)));
+```
+
 ### set()
 
-### unset()
+```jsx
+imh({ name: "Peter" }, imh.set("name", "Spider Man"));
+// => { name: 'Spider Man' }
+```
 
-### merge()
+### unset(...keys)
+
+```jsx
+imh({ prop1: 1, prop2: 2, prop3: 3 }, imh.unset("prop1", "prop2"));
+// => { prop3: 3 }
+
+imh([1, 2, 3], imh.unset(1, 2));
+// => [1, undefined, undefined]
+```
+
+### merge(...values)
+
+```jsx
+imh({ p1: 1, p2: 2 }, imh.merge({ p1: 1, p2: 2 }));
+// => { p1: 1, p2: 2 } nothing to change
+
+imh({ p1: 1, p2: 2 }, imh.merge({ p1: 1 }, { p2: 2 }));
+// => { p1: 1, p2: 2 } nothing to change
+
+imh({ p1: 1, p2: 2 }, imh.merge({ p1: 5 }, { p1: 1 }));
+// => { p1: 1, p2: 2 } nothing to change
+
+imh({ p1: 1, p2: 2 }, imh.merge({ p3: 3 }));
+// => { p1: 1, p2: 2, p3: 3 }
+```
 
 ## String
 
