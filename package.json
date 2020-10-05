@@ -1,0 +1,92 @@
+{
+  "name": "imh",
+  "version": "0.0.0",
+  "description": "The fastest immutable helper library",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "jest --runInBand --detectOpenHandles",
+    "build": "babel src --out-dir ./ --source-maps --ignore '**/*.test.js',src/__tests__ && npm run copyTypings",
+    "copyTypings": "cp src/lib/*.d.ts ./lib",
+    "benchmarks": "npm run build && babel-node --config-file ./.babel.node.config.js benchmarks.js",
+    "_publish": "npm run test && npm run build && npm publish"
+  },
+  "files": [
+    "lib"
+  ],
+  "bugs": {
+    "url": "https://github.com/linq2js/imh/issues"
+  },
+  "homepage": "https://github.com/linq2js/imh#readme",
+  "keywords": [
+    "functional",
+    "flux",
+    "immutable",
+    "data",
+    "stateless",
+    "javascript",
+    "redux",
+    "clone",
+    "copy",
+    "assign",
+    "typescript",
+    "state",
+    "clone",
+    "deepcopy",
+    "assign",
+    "copy",
+    "data",
+    "datastructure",
+    "react",
+    "angular",
+    "vue"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {},
+  "devDependencies": {
+    "jest": "^26.2.2",
+    "prettier": "^2.0.5",
+    "cross-env": "^7.0.2",
+    "@types/jest": "^25.2.3",
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.7.7",
+    "typescript": "^4.0.2",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/runtime": "^7.7.7",
+    "@babel/node": "^7.10.5",
+    "node-fetch": "^2.6.0",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@typescript-eslint/parser": "^3.7.1",
+    "terminal-kit": "^1.42.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "@testing-library/react": "^10.4.8",
+    "@testing-library/react-hooks": "^3.4.1",
+    "react-test-renderer": "^16.13.1",
+    "babel-jest": "^26.2.2",
+    "seamless-immutable": "^7.1.4",
+    "lodash": "^4.17.10",
+    "chalk": "^2.4.1",
+    "immutable": "^4.0.0-rc.12",
+    "timm": "^1.7.1",
+    "deep-freeze-strict": "^1.1.1",
+    "immutable-assign": "^2.1.4",
+    "immutability-helper": "^3.1.1",
+    "immhelper": "^1.0.52",
+    "update-immutable": "^1.5.0",
+    "immer": "^7.0.9"
+  }
+}
