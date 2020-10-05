@@ -141,7 +141,7 @@ console.log(state);
 
 ## API References
 
-**imh(obj, mutation | mutations)**
+**imh(obj, mutation/mutations)**
 
 ```jsx
 imh(1, imh.add(1));
@@ -166,7 +166,7 @@ imh({ username: "admin", password: "admin" }, [
 ]);
 ```
 
-**imh(mutation | mutations)**
+**imh(mutation/mutations)**
 
 Create imh wrapper function
 
@@ -185,7 +185,7 @@ imh([1, 2, 3], imh.push(4, 5, 6));
 // => [1, 2, 3, 4, 5, 6]
 ```
 
-**map(mutation | mutations)**
+**map(mutation/mutations)**
 
 ```jsx
 const todos = [
@@ -396,13 +396,12 @@ imh("Oop!!!", imh.upper());
 // => OOP!!!
 ```
 
-````
 **lower()**
 
 ```jsx
 imh("Oop!!!", imh.lower());
 // => oop!!!
-````
+```
 
 ## Misc
 
