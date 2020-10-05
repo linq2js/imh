@@ -7,5 +7,5 @@ imh(array, [
   imh.push("aaa", 1),
   imh.push("aaa", 1),
   imh.push("aaa", 1),
-  imh.each((value, data) => value * 2 * data.index),
+  imh.map((value, data) => value * 2 * data.index),
 ]);

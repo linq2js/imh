@@ -1,7 +1,7 @@
 {
   "name": "imh",
-  "version": "0.0.0",
-  "description": "The fastest immutable helper library",
+  "version": "0.0.1",
+  "description": "The extreme fast immutable helper",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

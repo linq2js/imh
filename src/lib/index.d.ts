@@ -7,12 +7,16 @@ export type Mutation<TModel = any, TData = any> = (
   model: TModel,
   data?: TData,
   context?: MutationContext
-) => TModel;
+) => TModel | Mutation<TModel, TData> | Mutation<TModel, TData>[];
 
 export type Push = (...items: any[]) => Mutation;
 
 export type Prop = (
-  key: string | number | (string | number)[],
+  key:
+    | string
+    | number
+    | ((item: any, index?: number) => boolean)
+    | (string | number | ((item: any, index?: number) => boolean))[],
   mutations: Mutation | Mutation[]
 ) => Mutation;
 
@@ -26,6 +30,8 @@ export type Map = (
 ) => Mutation;
 
 export type Unset = (...keys: (string | number)[]) => Mutation;
+
+export type Set = (key: string | number, value: any) => Mutation;
 
 export type Merge = (...values: {}[]) => Mutation;
 
@@ -47,7 +53,7 @@ export type Swap = (from: number, to: number) => Mutation;
 
 export type Remove = (...indices: number[]) => Mutation;
 
-export type Toggle = () => Mutation;
+export type Toggle = (...keys: any[]) => Mutation;
 
 export type Val = (value: any) => Mutation;
 
@@ -105,6 +111,8 @@ export interface DefaultExports extends Function {
   unshift: Unshift;
   reverse: Reverse;
   result: Result;
+
+  set: Set;
 }
 
 declare const imh: DefaultExports;
@@ -132,3 +140,4 @@ export const reverse: Reverse;
 export const result: Result;
 export const mul: Mul;
 export const div: Div;
+export const set: Set;

@@ -47,8 +47,8 @@ function wrapMutator(mutations, mutator) {
     }
     return mutator(
       model,
-      function (value, data) {
-        return applyMutations(value, context, data, mutations);
+      function (value, data, customMutations = mutations) {
+        return applyMutations(value, context, data, customMutations);
       },
       context,
       data
@@ -70,7 +70,10 @@ export function map(mutations) {
 
     let hasChange = false;
     const nextModel = model.map(function (currentValue, index, array) {
-      const nextValue = apply(currentValue, { index, array });
+      const data = { index, array };
+      let nextValue = tryMutate(apply(currentValue, data), (customMutations) =>
+        apply(currentValue, data, customMutations)
+      );
       if (nextValue !== currentValue) {
         hasChange = true;
         return nextValue;
@@ -125,19 +128,46 @@ export function prop(key, mutations) {
 }
 
 function mutateSingleProp(key, mutations) {
-  return wrapMutator(mutations, function (model, apply, context) {
-    if (typeof model === "undefined" || model === null) {
-      model = {};
+  return wrapMutator(
+    tryMutate(
+      mutations,
+      (x) => x,
+      (x) => val(x)
+    ),
+    function (model, apply, context) {
+      if (typeof model === "undefined" || model === null) {
+        model = {};
+      }
+      if (typeof key === "function") {
+        if (!Array.isArray(model)) {
+          throw new Error("Can use dynamic key with array type model only");
+        }
+        let cloned = model;
+        for (let i = 0; i < cloned.length; i++) {
+          const currentValue = cloned[i];
+          const found = key(cloned[i], i);
+          if (found) {
+            const nextValue = apply(currentValue);
+            if (nextValue !== cloned[i]) {
+              if (cloned === model) {
+                cloned = context.clone(model);
+              }
+              cloned[i] = nextValue;
+            }
+          }
+        }
+        return cloned;
+      }
+      const currentValue = model[key];
+      const nextValue = apply(currentValue);
+      if (currentValue === nextValue) {
+        return model;
+      }
+      const cloned = context.clone(model);
+      cloned[key] = nextValue;
+      return cloned;
     }
-    const currentValue = model[key];
-    const nextValue = apply(currentValue);
-    if (currentValue === nextValue) {
-      return model;
-    }
-    const cloned = context.clone(model);
-    cloned[key] = nextValue;
-    return cloned;
-  });
+  );
 }
 
 export function set(key, value) {
@@ -361,19 +391,11 @@ export function pop() {
 
 export function result(fn) {
   return function resultMutation(model, data, context) {
-    const mutation = fn(context.result, model);
-    if (
-      typeof mutation === "function" ||
-      (Array.isArray(mutation) && typeof mutation[0] === "function")
-    ) {
-      return applyMutations(
-        model,
-        context,
-        data,
-        Array.isArray(mutation) ? mutation : [mutation]
-      );
-    }
-    return model;
+    return tryMutate(
+      fn(context.result, model),
+      (mutations) => applyMutations(model, context, data, mutations),
+      () => model
+    );
   };
 }
 
@@ -463,4 +485,14 @@ function isEqual(a, b) {
 
 function isPromiseLike(obj) {
   return obj && typeof obj.then === "function";
+}
+
+function tryMutate(value, fn, fallback) {
+  if (typeof value === "function") {
+    return fn([value]);
+  }
+  if (Array.isArray(value) && typeof value[0] === "function") {
+    return fn(value);
+  }
+  return fallback ? fallback(value) : value;
 }

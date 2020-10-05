@@ -740,6 +740,12 @@
     setAt: function (arr, idx, val) {
       return timm.replaceAt(arr, idx, val);
     },
+    getAtDeep: function (arr, idx1, idx2) {
+      return arr[idx1][idx2];
+    },
+    setAtDeep: function (arr, idx1, idx2, val) {
+      return timm.setIn(arr, [idx1, idx2], val);
+    },
   };
 
   var _solImmutableJs = {
@@ -1113,20 +1119,20 @@
   _allTests("Immutable (imh)", _solImh);
   _allTests("Immutable (immutable.js)", _solImmutableJs);
   _allTests("Immutable (immer)", _solImmer);
-  // _allTests("Immutable (timm)", _solImmutableTimm);
-  /*
+  _allTests("Immutable (timm)", _solImmutableTimm);
   _allTests("Immutable (immutable-assign)", _solIassign);
   _allTests("Immutable (immhelper)", _solImmhelper);
   _allTests("Immutable (immutability-helper)", _solImmutabilityHelper);
   _allTests("Immutable (update-immutable)", _solUpdateImmutable);
   _allTests("Immutable (seamless-immutable production)", _solImmutableSeamless);
-  */
 
   // Deep freeze initial object/array
-  _isDevel = true;
-  _allTests("Immutable (Object.assign) + deep freeze", _solObjectAssign);
-  _allTests("Immutable (imh) + deep freeze", _solImh);
-  _allTests("Immutable (immer) + deep freeze", _solImmer);
+
+  // _isDevel = true;
+  // _allTests("Immutable (Object.assign) + deep freeze", _solObjectAssign);
+  // _allTests("Immutable (imh) + deep freeze", _solImh);
+  // _allTests("Immutable (immer) + deep freeze", _solImmer);
+
   /*
   _allTests("Immutable (immutable-assign) + deep freeze", _solIassign);
   _allTests(
@@ -1136,5 +1142,4 @@
   _allTests("Immutable (update-immutable) + deep freeze", _solUpdateImmutable);
   _allTests("Immutable (immhelper) + deep freeze", _solImmhelper);
    */
-
 }.call(this));

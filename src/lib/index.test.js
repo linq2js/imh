@@ -1,7 +1,7 @@
 import imh from "./index";
 import { List, Map, fromJS } from "immutable";
 
-const performanceTestCount = 1000;
+const performanceTestCount = 800;
 const todos = {
   ids: [1],
   entities: {
@@ -24,13 +24,13 @@ test("date.add(timestamp)", () => {
 
 test("set(prop, value)", () => {
   const original = { title: "todo" };
-  const next = imh(original, imh.set("title", "new todo"));
+  const next = imh(original, imh.prop("title", imh.val("new todo")));
   expect(next).toEqual({ title: "new todo" });
 });
 
 test("set(index, value)", () => {
   const original = [1, 2, 3];
-  const next = imh(original, imh.set(1, 3));
+  const next = imh(original, imh.prop(1, imh.val(3)));
   expect(next).toEqual([1, 3, 3]);
 });
 
@@ -185,6 +185,81 @@ test("result() continue mutate", () => {
     imh.result((result) => imh.push(...result)),
   ]);
   expect(next).toEqual([1, 2, 3, 4, 2, 3]);
+});
+
+test("prop(fn, value)", () => {
+  const original = [
+    { id: 1, title: "Todo 1", completed: false },
+    { id: 2, title: "Todo 2", completed: false },
+  ];
+
+  const next = imh(
+    original,
+    imh.prop((todo) => todo.id === 1, imh.prop("completed", imh.toggle()))
+  );
+
+  expect(next).toEqual([
+    { id: 1, title: "Todo 1", completed: true },
+    { id: 2, title: "Todo 2", completed: false },
+  ]);
+});
+
+test("temp", () => {
+  let state = {
+    todos: [{ id: 1, title: "Todo 1", completed: false }],
+    stats: {
+      active: 1,
+      completed: 0,
+    },
+  };
+
+  const StatsMutation = (current) =>
+    // mutate stats prop
+    imh.prop("stats", {
+      all: current.todos.length,
+      // compute number of active todos
+      active: current.todos.filter((todo) => !todo.completed).length,
+      // compute number of completed todos
+      completed: current.todos.filter((todo) => todo.completed).length,
+    });
+
+  function AddTodo(id, title) {
+    state = imh(state, [
+      // push new item to todos array
+      imh.prop("todos", imh.push({ id, title, completed: false })),
+      // update stats
+      StatsMutation,
+    ]);
+  }
+
+  function ToggleTodo(id) {
+    state = imh(state, [
+      // perform toggle action
+      imh.prop(
+        // nested prop path
+        [
+          // todos prop
+          "todos",
+          // toggle item which has id equal to given id
+          (todo) => todo.id === id,
+          // completed prop
+          "completed",
+        ],
+        // toggle boolean value: true => false, false => true
+        imh.toggle()
+        // we can pass arrow function to mutate value as well
+        // completed => !completed
+      ),
+      // update stats
+      StatsMutation,
+    ]);
+  }
+
+  AddTodo(2, "Todo 2");
+  AddTodo(3, "Todo 3");
+  ToggleTodo(3);
+
+  // console.log(state);
 });
 
 function modelCounter() {
