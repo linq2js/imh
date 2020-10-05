@@ -47,7 +47,13 @@ export type Filter = (
 
 export type Sort = (compareFn: (a?: any, b?: any) => number) => Mutation;
 
-export type OrderBy = (selector: (item?: any) => any) => Mutation;
+export type OrderBy = (
+  selector: (item?: any) => any,
+  direction?: Descending | Ascending
+) => Mutation;
+
+export type Descending = -1;
+export type Ascending = 1;
 
 export type Swap = (from: number, to: number) => Mutation;
 
@@ -87,6 +93,10 @@ export type Result = (
 ) => Mutation;
 export type Unshift = (...items: any[]) => Mutation;
 
+export type Replace = (findWhat: string, replaceWith: any) => Mutation;
+export type Upper = () => Mutation;
+export type Lower = () => Mutation;
+
 export interface DefaultExports extends Function {
   <TModel>(model: TModel, mutations: Mutation | Mutation[]): TModel;
   push: Push;
@@ -113,6 +123,14 @@ export interface DefaultExports extends Function {
   result: Result;
 
   set: Set;
+
+  replace: Replace;
+  lower: Lower;
+  upper: Upper;
+
+  mul: Mul;
+  div: Div;
+  def: Def;
 }
 
 declare const imh: DefaultExports;
@@ -141,3 +159,6 @@ export const result: Result;
 export const mul: Mul;
 export const div: Div;
 export const set: Set;
+export const upper: Upper;
+export const lower: Lower;
+export const replace: Replace;

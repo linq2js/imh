@@ -10,6 +10,8 @@ $ npm install --save imh
 
 ## Benchmarks
 
+### Single mutation
+
 | Library                         | Read |  Write |  Total |
 | ------------------------------- | ---: | -----: | -----: |
 | immutable.js (fastest)          |  265 |    372 |    637 |
@@ -21,6 +23,18 @@ $ npm install --save imh
 | immer                           |   46 | 18,386 | 18,432 |
 | update-immutable                |   44 | 38,532 | 38,576 |
 | immutability-helper             |   50 | 38,666 | 38,716 |
+
+### Multiple mutations
+
+| Library                    | Read | Write | Total |
+| -------------------------- | ---: | ----: | ----: |
+| update-immutable (fastest) |    1 |    97 |    98 |
+| imh                        |    1 |   198 |   199 |
+| immutability-helper        |    3 |   263 |   266 |
+| immhelper                  |    0 |   303 |   303 |
+| immutable.js               |  170 |   538 |   708 |
+| immer                      |    1 | 1,151 | 1,152 |
+| timm                       |    2 | 1,710 | 1,712 |
 
 **Hence, what I recommend (from top to bottom):**
 
@@ -123,4 +137,256 @@ console.log(state);
   stats: { all: 3, active: 2, completed: 1 }
 }
 */
+```
+
+## Imh
+
+### imh(obj, mutation | mutations)
+
+```jsx
+imh(1, imh.add(1));
+// => 2
+
+// using val() to tell imh that is literal value (not mutation)
+imh({ username: "admin", password: "admin" }, [
+  imh.prop("password", imh.val("123456")),
+  imh.prop("updatedOn", imh.val(Date.now())),
+]);
+
+// using custom mutation (a pure function that returns new value)
+imh({ username: "admin", password: "admin" }, [
+  imh.prop("password", () => "123456"),
+  imh.prop("updatedOn", () => Date.now()),
+]);
+
+// using set() to update object property
+imh({ username: "admin", password: "admin" }, [
+  imh.set("password", "123456"),
+  imh.set("updatedOn", Date.now()),
+]);
+```
+
+### imh(mutation | mutations)
+
+Create imh wrapper function
+
+```jsx
+const AddTen = imh(imh.add(10));
+AddTen(1);
+// => 11
+```
+
+## Array
+
+### push(...items)
+
+```jsx
+imh([1, 2, 3], imh.push(4, 5, 6));
+// => [1, 2, 3, 4, 5, 6]
+```
+
+### map(mutation | mutations)
+
+```jsx
+const todos = [
+  { id: 1, title: "Todo 1" },
+  { id: 2, title: "Todo 2" },
+];
+imh(
+  todos,
+  imh.map((todo) => ({ ...todo, title: todo.title.toUpperCase() }))
+);
+// => [ { id: 1, title: "TODO 1" }, { id: 2, title: "TODO 2" } ]
+
+imh(todos, imh.map(imh.prop("title", imh.lower())));
+// => [ { id: 1, title: "todo 1" }, { id: 2, title: "todo 2" } ]
+```
+
+### splice(index, length, ...newItems)
+
+```jsx
+imh([1, 2, 3, 4, 5], imh.splice(2, 2));
+// => [1, 2, 5]
+
+imh([1, 2, 3, 4, 5], imh.splice(2, 2, 9, 10));
+// => [1, 2, 9, 10, 5]
+```
+
+### filter(predicate)
+
+```jsx
+imh(
+  [1, 2, 3, 4, 5],
+  imh.filter((number) => number % 2 === 0)
+);
+// => [2, 4]
+```
+
+### sort([compareFn])
+
+```jsx
+imh([3, 2, 1], imh.sort());
+// => [1, 2, 3]
+
+imh(
+  [{ name: "banana" }, { name: "apple" }, { name: "watermelon" }],
+  imh.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
+);
+// => [{ name: "apple" }, { name: "banana" }, { name: "watermelon" }]
+```
+
+### orderBy([selector[, direction]])
+
+```jsx
+// order by name ascending
+imh(
+  [{ name: "banana" }, { name: "apple" }, { name: "watermelon" }],
+  imh.orderBy((item) => item.name)
+);
+// => [{ name: "apple" }, { name: "banana" }, { name: "watermelon" }]
+
+// order by name descending
+imh(
+  [{ name: "banana" }, { name: "apple" }, { name: "watermelon" }],
+  imh.orderBy((item) => item.name, -1)
+);
+// => [{ name: "watermelon" }, { name: "banana" }, { name: "apple" }]
+```
+
+### swap(from, to)
+
+```jsx
+imh([1, 2, 3], imh.swap(0, 2));
+// => [3, 2, 1]
+```
+
+### remove(...indices)
+
+```jsx
+imh([1, 2, 3], imh.remove(0, 2));
+// => [2]
+```
+
+### clear()
+
+```jsx
+imh([1, 2, 3], imh.clear());
+// => []
+```
+
+### pop()
+
+```jsx
+imh([1, 2, 3], imh.pop());
+// => [1, 2]
+```
+
+### shift()
+
+### unshift(...items)
+
+### reverse()
+
+## Object
+
+### prop()
+
+### set()
+
+### unset()
+
+### merge()
+
+## String
+
+### replace(findWhat, replaceWith)
+
+```jsx
+imh("banana, apple, watermelon, banana", imh.replace("banana", "orange"));
+// => 'orange, apple, watermelon, banana`
+
+imh("banana, apple, watermelon, banana", imh.replace("banana", /orange/g));
+// => 'orange, apple, watermelon, orange`
+```
+
+### upper()
+
+```jsx
+imh("Oop!!!", imh.upper());
+// => OOP!!!
+```
+
+````
+### lower()
+
+```jsx
+imh("Oop!!!", imh.lower());
+// => oop!!!
+````
+
+## Misc
+
+### add()
+
+```jsx
+imh(1, imh.add(9));
+// => 10
+
+imh(
+  new Date(2000, 1, 1),
+  img.add({
+    years: 1,
+    months: 1,
+    days: 1,
+    hours: 12,
+    minutes: 12,
+    seconds: 12,
+    milliseconds: 900,
+  })
+);
+// => 2001/02/02 12:12:12:900
+
+imh(
+  // unix timestamp
+  new Date(2000, 1, 1).getTime(),
+  img.add({
+    years: 1,
+    months: 1,
+    days: 1,
+    hours: 12,
+    minutes: 12,
+    seconds: 12,
+    milliseconds: 900,
+  })
+);
+// => unix timestamp
+```
+
+### toggle()
+
+```jsx
+imh({ completed: false }, imh.prop("completed", imh.toggle()));
+// => { completed: true }
+```
+
+### val(value)
+
+### result(callback)
+
+Get result of last mutation. It is often used with splice() / pop() / shift()
+
+```jsx
+let state = {
+  sourceList: ["item 1", "item 2"],
+  destList: ["item 3", "item 4"],
+};
+
+function move(index, count) {
+  state = imh(state, [
+    // remove some from sourceList
+    imh.prop("sourceList", imh.splice(index, count)),
+    // append to destList
+    imh.result((result) => imh.prop("destList", imh.push(...result))),
+  ]);
+}
 ```

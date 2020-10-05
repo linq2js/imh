@@ -1,5 +1,7 @@
 let globalClonedObjects;
 
+const defaultOrderBy = (x) => x;
+
 export default function imh() {
   // create mutator
   if (arguments.length < 2) {
@@ -35,6 +37,9 @@ Object.assign(imh, {
   unshift,
   reverse,
   result,
+  lower,
+  upper,
+  replace,
 });
 
 function wrapMutator(mutations, mutator) {
@@ -263,11 +268,11 @@ export function sort(compareFn) {
   };
 }
 
-export function orderBy(selector) {
+export function orderBy(selector = defaultOrderBy, direction = 1) {
   return sort((a, b) => {
     const av = selector(a);
     const bv = selector(b);
-    return av > bv ? 1 : av < bv ? -1 : 0;
+    return (av > bv ? 1 : av < bv ? -1 : 0) * direction;
   });
 }
 
@@ -354,6 +359,27 @@ export function div(value) {
   };
 }
 
+export function replace(findWhat, replaceWith) {
+  return function replaceMutation(model) {
+    mustBeString(model);
+    return model.replace(findWhat, replaceWith);
+  };
+}
+
+export function upper() {
+  return function upperMutation(model) {
+    mustBeString(model);
+    return model.toUpperCase();
+  };
+}
+
+export function lower() {
+  return function lowerMutation(model) {
+    mustBeString(model);
+    return model.toLowerCase();
+  };
+}
+
 export function toggle() {
   return function toggleMutation(model) {
     return !model;
@@ -429,6 +455,10 @@ export function reverse() {
 
 function mustBeArray(value) {
   if (!Array.isArray(value)) throw new Error("Input must be array type");
+}
+
+function mustBeString(value) {
+  if (typeof value !== "string") throw new Error("Input must be string type");
 }
 
 function getOriginalValue(obj) {

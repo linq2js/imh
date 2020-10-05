@@ -1,6 +1,6 @@
 {
   "name": "imh",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "The extremely fast immutable helper",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,6 +9,7 @@
     "build": "babel src --out-dir ./ --source-maps --ignore '**/*.test.js',src/__tests__ && npm run copyTypings",
     "copyTypings": "cp src/lib/*.d.ts ./lib",
     "benchmarks": "npm run build && babel-node --config-file ./.babel.node.config.js benchmarks.js",
+    "benchmarks-multiple": "npm run build && babel-node --config-file ./.babel.node.config.js multipleMutations.js",
     "_publish": "npm run test && npm run build && npm publish"
   },
   "files": [
