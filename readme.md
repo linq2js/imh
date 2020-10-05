@@ -141,7 +141,7 @@ console.log(state);
 
 ## API References
 
-### imh(obj, mutation | mutations)
+**imh(obj, mutation | mutations)**
 
 ```jsx
 imh(1, imh.add(1));
@@ -166,7 +166,7 @@ imh({ username: "admin", password: "admin" }, [
 ]);
 ```
 
-### imh(mutation | mutations)
+**imh(mutation | mutations)**
 
 Create imh wrapper function
 
@@ -178,14 +178,14 @@ AddTen(1);
 
 ## Array
 
-### push(...items)
+**push(...items)**
 
 ```jsx
 imh([1, 2, 3], imh.push(4, 5, 6));
 // => [1, 2, 3, 4, 5, 6]
 ```
 
-### map(mutation | mutations)
+**map(mutation | mutations)**
 
 ```jsx
 const todos = [
@@ -202,7 +202,7 @@ imh(todos, imh.map(imh.prop("title", imh.lower())));
 // => [ { id: 1, title: "todo 1" }, { id: 2, title: "todo 2" } ]
 ```
 
-### splice(index, length, ...newItems)
+**splice(index, length, ...newItems)**
 
 ```jsx
 imh([1, 2, 3, 4, 5], imh.splice(2, 2));
@@ -212,7 +212,7 @@ imh([1, 2, 3, 4, 5], imh.splice(2, 2, 9, 10));
 // => [1, 2, 9, 10, 5]
 ```
 
-### filter(predicate)
+**filter(predicate)**
 
 ```jsx
 imh(
@@ -222,7 +222,7 @@ imh(
 // => [2, 4]
 ```
 
-### sort([compareFn])
+**sort([compareFn])**
 
 ```jsx
 imh([3, 2, 1], imh.sort());
@@ -235,7 +235,7 @@ imh(
 // => [{ name: "apple" }, { name: "banana" }, { name: "watermelon" }]
 ```
 
-### orderBy([selector[, direction]])
+**orderBy([selector[, direction]])**
 
 ```jsx
 // order by name ascending
@@ -253,49 +253,49 @@ imh(
 // => [{ name: "watermelon" }, { name: "banana" }, { name: "apple" }]
 ```
 
-### swap(from, to)
+**swap(from, to)**
 
 ```jsx
 imh([1, 2, 3], imh.swap(0, 2));
 // => [3, 2, 1]
 ```
 
-### remove(...indices)
+**remove(...indices)**
 
 ```jsx
 imh([1, 2, 3], imh.remove(0, 2));
 // => [2]
 ```
 
-### clear()
+**clear()**
 
 ```jsx
 imh([1, 2, 3], imh.clear());
 // => []
 ```
 
-### pop()
+**pop()**
 
 ```jsx
 imh([1, 2, 3], imh.pop());
 // => [1, 2]
 ```
 
-### shift()
+**shift()**
 
 ```jsx
 imh([1, 2, 3], imh.shift());
 // => [2, 3]
 ```
 
-### unshift(...items)
+**unshift(...items)**
 
 ```jsx
 imh([1, 2, 3], imh.unshift(-1, 0));
 // => [-1, 0, 1, 2, 3]
 ```
 
-### reverse()
+**reverse()**
 
 ```jsx
 imh([1, 2, 3], imh.reverse());
@@ -304,7 +304,7 @@ imh([1, 2, 3], imh.reverse());
 
 ## Object
 
-### prop()
+**prop(name, mutation) & val(value)**
 
 Update current / nested object property
 
@@ -341,14 +341,17 @@ imh(
 imh(model, imh.prop(["l1", "l2", "l3"], imh.set("l4", 2)));
 ```
 
-### set()
+**set(key, value)**
 
 ```jsx
 imh({ name: "Peter" }, imh.set("name", "Spider Man"));
 // => { name: 'Spider Man' }
+
+imh([1, 2, 3], imh.set(1, 4));
+// => [1, 4, 3]
 ```
 
-### unset(...keys)
+**unset(...keys)**
 
 ```jsx
 imh({ prop1: 1, prop2: 2, prop3: 3 }, imh.unset("prop1", "prop2"));
@@ -358,7 +361,7 @@ imh([1, 2, 3], imh.unset(1, 2));
 // => [1, undefined, undefined]
 ```
 
-### merge(...values)
+**merge(...values)**
 
 ```jsx
 imh({ p1: 1, p2: 2 }, imh.merge({ p1: 1, p2: 2 }));
@@ -376,7 +379,7 @@ imh({ p1: 1, p2: 2 }, imh.merge({ p3: 3 }));
 
 ## String
 
-### replace(findWhat, replaceWith)
+**replace(findWhat, replaceWith)**
 
 ```jsx
 imh("banana, apple, watermelon, banana", imh.replace("banana", "orange"));
@@ -386,7 +389,7 @@ imh("banana, apple, watermelon, banana", imh.replace("banana", /orange/g));
 // => 'orange, apple, watermelon, orange`
 ```
 
-### upper()
+**upper()**
 
 ```jsx
 imh("Oop!!!", imh.upper());
@@ -394,7 +397,7 @@ imh("Oop!!!", imh.upper());
 ```
 
 ````
-### lower()
+**lower()**
 
 ```jsx
 imh("Oop!!!", imh.lower());
@@ -403,7 +406,7 @@ imh("Oop!!!", imh.lower());
 
 ## Misc
 
-### add()
+**add()**
 
 ```jsx
 imh(1, imh.add(9));
@@ -439,16 +442,14 @@ imh(
 // => unix timestamp
 ```
 
-### toggle()
+**toggle()**
 
 ```jsx
 imh({ completed: false }, imh.prop("completed", imh.toggle()));
 // => { completed: true }
 ```
 
-### val(value)
-
-### result(callback)
+**result(callback)**
 
 Get result of last mutation. It is often used with splice() / pop() / shift()
 
