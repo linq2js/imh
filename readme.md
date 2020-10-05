@@ -1,6 +1,6 @@
 # imh (Immutable Helper)
 
-The extreme fast immutable helper
+The extremely fast immutable helper
 
 ## Installation
 
