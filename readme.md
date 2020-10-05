@@ -12,29 +12,29 @@ $ npm install --save imh
 
 **Single mutation**
 
-| Library                         | Read |  Write |  Total |
-| ------------------------------- | ---: | -----: | -----: |
-| immutable.js (fastest)          |  265 |    372 |    637 |
-| imh                             |   59 |    635 |    694 |
-| timm                            |   43 |    662 |    705 |
-| immutable-assign                |   58 |    806 |    864 |
-| immhelper                       |   55 |  1,049 |  1,104 |
-| seamless-immutable (production) |   56 | 13,630 | 13,686 |
-| immer                           |   46 | 18,386 | 18,432 |
-| update-immutable                |   44 | 38,532 | 38,576 |
-| immutability-helper             |   50 | 38,666 | 38,716 |
+| **Library**                     | **Read** | **Write** | **Total** |
+| ------------------------------- | -------: | --------: | --------: |
+| immutable.js (fastest)          |      265 |       372 |       637 |
+| **imh**                         |   **59** |   **635** |   **694** |
+| timm                            |       43 |       662 |       705 |
+| immutable-assign                |       58 |       806 |       864 |
+| immhelper                       |       55 |     1,049 |     1,104 |
+| seamless-immutable (production) |       56 |    13,630 |    13,686 |
+| immer                           |       46 |    18,386 |    18,432 |
+| update-immutable                |       44 |    38,532 |    38,576 |
+| immutability-helper             |       50 |    38,666 |    38,716 |
 
 **Multiple mutations**
 
-| Library                    | Read | Write | Total |
-| -------------------------- | ---: | ----: | ----: |
-| update-immutable (fastest) |    1 |    97 |    98 |
-| imh                        |    1 |   198 |   199 |
-| immutability-helper        |    3 |   263 |   266 |
-| immhelper                  |    0 |   303 |   303 |
-| immutable.js               |  170 |   538 |   708 |
-| immer                      |    1 | 1,151 | 1,152 |
-| timm                       |    2 | 1,710 | 1,712 |
+| **Library**                | **Read** | **Write** | **Total** |
+| -------------------------- | -------: | --------: | --------: |
+| update-immutable (fastest) |        1 |        97 |        98 |
+| **imh**                    |    **1** |   **198** |   **199** |
+| immutability-helper        |        3 |       263 |       266 |
+| immhelper                  |        0 |       303 |       303 |
+| immutable.js               |      170 |       538 |       708 |
+| immer                      |        1 |     1,151 |     1,152 |
+| timm                       |        2 |     1,710 |     1,712 |
 
 **Hence, what I recommend (from top to bottom):**
 
